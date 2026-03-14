@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>HTML5 MD2 Model Viewer (MD2-4-HTML5)</title>
+
+    <meta name="description" content="MD2-4-HTML5 is a simple MD2 model loader and viewer built with HTML5 and WebGL.">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="libs/knockout-3.5.1.js"></script>
+
+    <script src="mat4.js"></script>
+    <script src="MD2Loader.js"></script>
+    <script src="MD2Renderer.js"></script>
+    <script src="app.js"></script>
+
+</head>
+
+<body>
+
+<div class="app" id="app">
+
+    <!-- TOP BAR ----------------------------------------------------->
+    <header class="topbar">
+        <h1>HTML5 MD2 Model Viewer (MD2-4-HTML5)</h1>
+    </header>
+
+    <!-- MAIN SECTION ------------------------------------------------>
+    <main class="main-layout">
+
+        <!-- SIDE BAR / CONTROLS ---------------->
+        <aside class="sidebar">
+            <div class="sidebar-scroll">
+
+                <section class="panel load-panel">
+                    <h2>Example Models</h2>
+                    <select class="select-full" data-bind="options: exampleModels, optionsText: 'name', optionsCaption: '— select —', value: selectedExample"></select>
+                    <button class="button" data-bind="click: loadExample, enable: selectedExample">Load</button>
+                </section>
+
+                <section class="panel load-panel">
+                    <h2>Custom Model</h2>
+                    <label class="file-button full-width" title="Load .md2 model file">
+                        Load Model
+                        <input type="file" accept=".md2" data-bind="event: { change: onModelFile }"/>
+                    </label>
+                    <label class="file-button full-width" title="Load skin texture (PNG, JPG, etc.)">
+                        Load Skin
+                        <input type="file" accept="image/*" data-bind="event: { change: onSkinFile }"/>
+                    </label>
+                </section>
+
+                <section class="panel controls-panel" data-bind="css: { disabled: !modelLoaded() }">
+                    <h2>Playback</h2>
+                    <div class="control-row">
+                        <button class="button" data-bind="text: playLabel, click: togglePlay, enable: modelLoaded"></button>
+                    </div>
+                    <div class="control-row">
+                        <label>
+                            SPEED (FPS)
+                            <input type="range" min="1" max="30" step="1" data-bind="value: animSpeed, enable: modelLoaded"/>
+                            <span data-bind="text: animSpeed"></span>
+                        </label>
+                    </div>
+                    <div class="control-row frame-display" data-bind="text: frameDisplay"></div>
+                </section>
+
+                <section class="panel">
+                    <h2>Animations</h2>
+
+                    <!-- ko ifnot: modelLoaded -->
+                    <p class="hint">NO MODEL LOADED</p>
+                    <!-- /ko -->
+
+                    <!-- ko if: modelLoaded -->
+                    <ul class="animation-list" data-bind="foreach: animations">
+                        <li data-bind="text: $data, css: { active: $data === $root.selectedAnimation() }, click: $root.selectAnimation.bind($root)"></li>
+                    </ul>
+                    <!-- /ko -->
+
+                </section>
+
+            </div>
+        </aside>
+
+        <!-- CONTENT / CANVAS ------------------->
+        <div class="canvas-wrap">
+            <canvas id="glCanvas"></canvas>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM BAR / CONSOLE ---------------------------------------->
+    <div class="console-panel">
+        <div class="console-header">
+            <span>DIAGNOSTIC LOG</span>
+            <button class="console-clear" data-bind="click: clearLog">clear</button>
+        </div>
+        <div class="console-body" data-bind="foreach: logEntries">
+            <div data-bind="css: 'log-' + type">
+                <span class="log-time" data-bind="text: time"></span>
+                <span class="log-text" data-bind="text: text"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
