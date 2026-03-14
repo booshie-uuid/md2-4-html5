@@ -6,6 +6,10 @@ Currently only supports providing a single skin texture per model, but does extr
 
 MD2 is a legacy model and keyframe animation format used in classic games like Quake 2 and Doom. It is a simple format that stores a list of vertex positions for each frame of animation, with no bones, skinning weights, or other modern complexities. Great for learning the basics of 3D rendering and animation.
 
+# LIVE DEMO
+
+https://matthewlynch.net/projects/md2-4-html5/
+
 # COPYRIGHT / LICENSE
 
 Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
